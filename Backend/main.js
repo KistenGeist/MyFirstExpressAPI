@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors = require("cors");
+const Logger = require("./Logger.js");
+
+// Node Logger
+const logger = new Logger();
 
 app.use(express.json());
 //Cors
@@ -34,10 +38,7 @@ app.post('/identity/:id', (req, res) => {
 app.get('/WhatAreYou', (req, res) => {
     //res.send( {fs: "../Creeper.png"});
     try {
-        var dir = __dirname + "\\images\\Creeper.png";
-        res.sendFile(dir);
         
-        //res.send({dirname: __dirname, dir: dir})
     }
     catch (err) {
         res.send({error: err});
@@ -46,4 +47,6 @@ app.get('/WhatAreYou', (req, res) => {
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
+    logger.Log("Server started.");
 });
+
