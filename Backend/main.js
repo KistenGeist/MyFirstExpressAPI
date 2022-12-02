@@ -12,16 +12,21 @@ app.use(express.json());
 //Cors
 app.use(cors());
 
+//#region reposiories
+const HaustierRepository = require("./Repositories/HaustierRepository.js");
+const haustier = new HaustierRepository();
+
+//#endregion
+
 //#region setup config
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
 
 // Then load configuration from a designated file.
-console.log(__dirname+ "\\config.json");
+
 nconf.file({
     file: __dirname + "\\config.json"
 });
-//console.log(nconf);
 //#endregion
 
 port = nconf.get("MyFirstExpressAPI:port");
@@ -42,9 +47,9 @@ app.get("/", (req, res) => {
 app.all("/app/*", function (req, res, next) {
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile("./public/app/index.html", {
-      root: __dirname,
+        root: __dirname,
     });
-  });
+});
 
 app.get('/identity', (req, res) => {
     res.status(200).send({
@@ -78,6 +83,27 @@ app.get('/WhatAreYou', (req, res) => {
     catch (err) {
         res.send({ error: err });
     }
+});
+
+app.get('/GetHaustiere', async (req, res) => {
+    const allAnimals = await haustier.GetHaustierData();
+    let response = {
+        Info: "Hier sind alle Tiere glücklich beisammen :).",
+        Tiere: {}
+    };
+    console.log(allAnimals);
+    await allAnimals.forEach((animal) => {
+        if (!response["Tiere"][animal.ID]){
+            response["Tiere"][animal.ID] = {};
+        }
+
+        response["Tiere"][animal.ID] = {
+            Tierart: animal.Tierart,
+            Name: animal.Name,
+            Alter: animal.AlterInJahren
+        };
+    });
+    res.send(response);
 });
 //#endregion
 
