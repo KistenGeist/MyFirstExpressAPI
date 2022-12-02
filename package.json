@@ -1,0 +1,32 @@
+{
+  "name": "myfirstapi",
+  "version": "1.0.0",
+  "description": "Das ist meine erste eigene API.",
+  "main": "./Backend/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KistenGeist/MyFirstExpressAPI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KistenGeist/MyFirstExpressAPI/issues"
+  },
+  "homepage": "https://github.com/KistenGeist/MyFirstExpressAPI#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "https": "^1.0.0",
+    "moment": "^2.29.4",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nconf": "^0.12.0",
+    "nodemon": "^2.0.20"
+  }
+}
