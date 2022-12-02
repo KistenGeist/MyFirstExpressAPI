@@ -1,0 +1,21 @@
+{
+    "MyFirstExpressAPI": {
+        "enviroment": "LOCAL",
+        "version":"1.0",
+        "author":"",
+        "documentation":"",
+        "port": 3000
+    },
+    "sqlLOCAL": {
+        "user":"root",
+        "password":"",
+        "host":"127.0.0.1",
+        "database":"myfirstexpressapidb"
+    },
+    "sqlLIVE": {
+        "user":"",
+        "password":"",
+        "host":"127.0.0.1",
+        "database":""
+    }
+}
