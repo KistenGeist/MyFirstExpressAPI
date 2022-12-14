@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 const Logger = require("./Logger.js");
+const fs = require("fs");
 var nconf = require("nconf");
 let port = 3000;
 
@@ -18,6 +19,11 @@ const haustier = new HaustierRepository();
 
 //#endregion
 
+//#region video
+//const videoPath = '\\images\\TestVideo.mp4'
+//const videoSize = fs.statSync('TestVideo.mp4').size;
+//#endregion
+
 //#region setup config
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
@@ -27,6 +33,7 @@ nconf.argv().env();
 nconf.file({
     file: __dirname + "\\config.json"
 });
+
 //#endregion
 
 port = nconf.get("MyFirstExpressAPI:port");
@@ -93,7 +100,7 @@ app.get('/GetHaustiere', async (req, res) => {
     };
     console.log(allAnimals);
     await allAnimals.forEach((animal) => {
-        if (!response["Tiere"][animal.ID]){
+        if (!response["Tiere"][animal.ID]) {
             response["Tiere"][animal.ID] = {};
         }
 
@@ -104,6 +111,34 @@ app.get('/GetHaustiere', async (req, res) => {
         };
     });
     res.send(response);
+});
+
+app.get('/video', function (req, res) {
+
+    try {
+        const range = req.headers.range;
+        if (!range) {
+            res.status(400).send("Requires Range Header");
+        }
+        const videoPath = __dirname + "\\TestVideo.mp4";
+        const videoSize = fs.statSync(__dirname + "\\TestVideo.mp4").size;
+        const CHUNK_SIZE = 10 ** 6; //1MB
+        const start = Number(range.replace(/\D/g, ""));
+        const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
+        const contentLength = end - start + 1;
+    
+        const headers = {
+            "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+            "Accept-Ranges": "bytes",
+            "Content-Length": contentLength,
+            "Content-Type": "video/mp4",
+        }
+        res.writeHead(206, headers); //partial content
+        const videoStream = fs.createReadStream(videoPath, { start, end });
+        videoStream.pipe(res);   
+    } catch (error) {
+       console.log(error) ;
+    }
 });
 //#endregion
 

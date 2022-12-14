@@ -37,7 +37,6 @@ user = sqlDbData.user;
 password = sqlDbData.password;
 host = sqlDbData.host;
 database = sqlDbData.database;
-//console.log(user + '-' + database + '-' + host + '-' +  + password);
 
 //create Connection to tb
 const connection = mysql.createConnection({
