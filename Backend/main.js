@@ -3,7 +3,9 @@ const app = express();
 const cors = require("cors");
 const Logger = require("./Logger.js");
 const fs = require("fs");
+const path = require("path");
 var nconf = require("nconf");
+
 let port = 3000;
 
 // Node Logger
@@ -114,8 +116,8 @@ app.get('/GetHaustiere', async (req, res) => {
 });
 
 app.get('/video', function (req, res) {
-
-    try {
+    //method 1
+    /* try {
         const range = req.headers.range;
         if (!range) {
             res.status(400).send("Requires Range Header");
@@ -138,7 +140,13 @@ app.get('/video', function (req, res) {
         videoStream.pipe(res);   
     } catch (error) {
        console.log(error) ;
-    }
+    } */
+    //var test = path.resolve("./TestVideo.mp4");
+
+    //method 2
+    const readStream = fs.createReadStream(path.resolve(__dirname + "\\TestVideo.mp4"), { flags: "r" });
+    res.header("Content-Type", "video/mp4");
+    readStream.pipe(res);
 });
 //#endregion
 

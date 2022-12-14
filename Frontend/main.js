@@ -1,3 +1,5 @@
+/* const fs = require("fs"); */
+
 var btn = document.getElementById("btn");
 var loadVideo = document.getElementById("btnLoadVideo");
 var img = document.getElementById("img");
@@ -16,10 +18,6 @@ setTimeout(function(){
     videoSource.setAttribute('type', 'video/webm');
     videoPlayer.load();
     videoPlayer.play();
-    console.log({
-      src: videoSource.getAttribute('src'),
-      type: videoSource.getAttribute('type'),
-    });
   }, 3000);
 
 btn.onclick = function () {
@@ -39,7 +37,7 @@ btn.onclick = function () {
 }
 
 loadVideo.onclick = function () {
-    $.ajax({
+    /* $.ajax({
         type: "GET",
         //url: "http://localhost:8080/WhatAreYou",
         url: "http://localhost:3000/video",
@@ -53,6 +51,40 @@ loadVideo.onclick = function () {
         error: function (response, status) {
             console.log(response);
         }
-    });
+    }) */
+    /* .then((response) => response.body)
+    .then(async readableStream => {
+        const reader = readableStream.getReader();
+        let buffer = [];
+        while (1) {
+            const { value, done } = await reader.read();
+            if (done) {
+                const blob = new Blob(buffer);
+                const blobUrl = URL.createObjectURL(blob);
+                videoPlayer.src = blobUrl;
+                break;
+            }
+            buffer.push(value);
+        }
+    }) */
     
+    fetch("http://localhost:3000/video")
+    .then((response) => response.body)
+    .then(async readableStream => {
+        const reader = readableStream.getReader();
+        let buffer = [];
+        while (1) {
+            const { value, done } = await reader.read();
+            if (done) {
+                const blob = new Blob(buffer);
+                const blobUrl = URL.createObjectURL(blob);
+                videoPlayer.src = blobUrl;
+                break;
+            }
+            buffer.push(value);
+        }
+    })
+    .catch((err) => {
+        console.error("ERROR!", err);
+    });
 }
